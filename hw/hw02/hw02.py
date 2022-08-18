@@ -23,6 +23,21 @@ def num_eights(x):
     True
     """
     "*** YOUR CODE HERE ***"
+#    count = 0
+#    if x < 10:
+#        if x == 8 : count += 1
+#    else : 
+#        sum_digit = x//10
+#        last_digit = x%10
+#        if last_digit == 8: count += 1
+#        count += num_eights(sum_digit)
+#    return count
+#   #the wrong construct(no assigment)
+    if x == 8 : return 1
+    elif x < 10 : return 0
+    else : 
+        if x%10 == 8: return num_eights(x//10) + 1
+        else : return num_eights(x//10)
 
 
 def pingpong(n):
@@ -58,7 +73,27 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+#    # while statement with assigment statements
+#    direct = 1
+#    index = 1
+#    ppnum = 1
+#    while index < n : 
+#        index += 1
+#        ppnum += direct
+#        #switch statement
+#        if index%8 == 0 or num_eights(index):
+#            direct = -direct
+#    return ppnum
+    
+    #use function arugument to finish "assigment" (pass the values).
+    def helper(direct=1, index=1, ppnum=1):
+        if  n == index: return ppnum
+        else:
+            if index%8 == 0 or num_eights(index):
+                return helper(-direct, index+1, ppnum-direct)
+            else:
+                return helper(direct, index+1, ppnum+direct)
+    return helper()
 
 def missing_digits(n):
     """Given a number a that is in sorted, increasing order,
@@ -88,6 +123,14 @@ def missing_digits(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n//10 == 0 : return 0
+    else: 
+        next_seq, last_digit = n//10, n%10
+        last_second_digit = next_seq%10
+        if last_digit == last_second_digit:
+            return missing_digits(next_seq)
+        else:
+            return last_digit - last_second_digit - 1 + missing_digits(next_seq)
 
 
 def next_largest_coin(coin):
@@ -124,6 +167,17 @@ def count_coins(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(sum_num = total, smallest_coin = 1):
+        # base condition
+        if sum_num == 0: return 1 #make sure the num is consist of coin-nummber
+        elif sum_num < 0 or smallest_coin == None: return 0
+        # recursive condition
+        else:
+            next_coin = next_largest_coin(smallest_coin)
+            with_smallest_coin = helper(sum_num - smallest_coin, smallest_coin)
+            without_smallest_coin = helper(sum_num, next_coin)
+            return with_smallest_coin + without_smallest_coin 
+    return helper()
 
 
 from operator import sub, mul
